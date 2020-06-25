@@ -4,6 +4,7 @@
 #include "Message.h"
 
 #include <string>
+#include <iostream>
 
 struct Diary
 {
