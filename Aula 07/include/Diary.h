@@ -4,11 +4,11 @@
 #include "Message.h"
 
 #include <string>
-#include <iostream>
 
 struct Diary
 {
     Diary(const std::string& filename);
+    ~Diary();
 
     std::string filename;
     Message* messages;

@@ -1,20 +1,26 @@
 #include "../include/Diary.h"
 
-Diary::Diary(const std::string& filename) : messages_capacity(10),
-messages_size(0), messages(nullptr)
+Diary::Diary(const std::string& name) : filename(name), messages(nullptr), messages_size(0), messages_capacity(10)
 {
-	//this->filename = filename;
-	messages = new Message[messages_capacity];
+    messages = new Message[messages_capacity];
 }
 
-void Diary::add(const std::string& message){
-    // adicionar mensagem no array de mensagens
-   	if (messages_size < messages_capacity){
-	    Message *aux = new Message;
-	    aux->content = message;
-	    messages[messages_size] = *aux;
-	    messages_size = messages_size + 1;
-	}
+Diary::~Diary()
+{
+    delete[] messages;
+}
+
+void Diary::add(const std::string& message)
+{
+    if (messages_size >= messages_capacity) {
+        return;
+    }
+
+    Message m;
+    m.content = message;
+
+    messages[messages_size] = m;
+    messages_size++;
 }
 
 void Diary::write()
