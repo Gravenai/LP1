@@ -16,3 +16,23 @@ void Time::set_from_string(const std::string& time){
 	stream >> second;
 
 }
+
+std::string Time::to_string(){
+	std::stringstream stream;
+
+	if (hour < 10){
+		stream << '0';
+	}
+	stream << hour;
+	stream << ':';
+	if (minute < 10){
+		stream << '0';
+	}
+	stream << minute;
+	stream << ':';
+	if (second< 10){
+		stream << '0';
+	}
+	stream << second;
+	return stream.str();
+}

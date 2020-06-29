@@ -1,8 +1,7 @@
 #include "../include/App.h"
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]){
 
-    App aplicativo("diary.md");
+    App aplicativo("dados.md");
     return aplicativo.run(argc, argv);
 }

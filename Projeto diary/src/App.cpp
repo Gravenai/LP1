@@ -16,6 +16,7 @@ int App::run(int argc, char* argv[])
     std::string action = argv[1];
 
     if (action == "add") {
+
         if (argc == 2) {
             add();
         } else {

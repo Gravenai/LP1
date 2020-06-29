@@ -3,7 +3,10 @@
 
 #include "Message.h"
 
+#include <fstream>
 #include <string>
+#include <ctime>
+#include <sstream>
 
 struct Diary
 {
@@ -17,5 +20,7 @@ struct Diary
 
     void add(const std::string& message);
     void write();
+    void load();
+    void updateCapacity();
 };
 #endif
