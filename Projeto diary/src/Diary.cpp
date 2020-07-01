@@ -1,6 +1,5 @@
 #include "../include/Diary.h"
 
-
 std::string format_current_date(const std::string &format) {
   std::time_t time = std::time(nullptr);
   char result[1024];
@@ -18,17 +17,15 @@ std::string get_current_time() {
 
 // ---------------------------------------------------------------------------------------------------------------
 
-Diary::Diary(const std::string& name) : filename(name), messages(nullptr), messages_size(0), messages_capacity(10)
+Diary::Diary(const std::string& name) : filename(name), messages_size(0), messages_capacity(10)
 {
-    messages = new Message[messages_capacity];
-
     load();
     
 }
 
 Diary::~Diary()
 {
-    delete[] messages;
+    
 }
 
 void Diary::add(const std::string& message)
@@ -42,12 +39,8 @@ void Diary::add(const std::string& message)
     m.date.set_from_string(get_current_date());
     m.time.set_from_string(get_current_time());
 
-    messages[messages_size] = m;
+    messages.push_back(m);
     messages_size++;
-
-    if (messages_size >= messages_capacity){
-        updateCapacity();
-    }
 
 }
 
@@ -101,24 +94,24 @@ void Diary::load(){
                 m.content = auxContent;
                 m.time = auxTime;
                 m.date = auxDate;
-                messages[messages_size] = m;
+                messages.push_back(m);
                 messages_size++;
-                if (messages_size >= messages_capacity){
-                       updateCapacity();
-                }
+                
             }
         }
     }
 }
 
-void Diary::updateCapacity(){
-    
-    messages_capacity = messages_capacity * 2;
-    Message *m = new Message[messages_capacity];
-    for (int i = 0; i < messages_size; i++){
-        m[i] = messages[i];
+std::vector<Message*> Diary::search(const std::string& findString) {
+    std::vector<Message*> aux;
+    for (auto i : messages){
+        int equal = -1;
+
+        equal = i.content.find(findString);
+        if (equal != -1){
+            aux.push_back(&i);
+
+        }
     }
-    delete[] messages;
-    messages = m;
-    
+    return aux;
 }

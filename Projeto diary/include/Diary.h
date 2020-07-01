@@ -7,6 +7,7 @@
 #include <string>
 #include <ctime>
 #include <sstream>
+#include <vector>
 
 struct Diary
 {
@@ -14,7 +15,7 @@ struct Diary
     ~Diary();
 
     std::string filename;
-    Message* messages;
+    std::vector<Message> messages;
     size_t messages_size;
     size_t messages_capacity;
 
@@ -22,5 +23,6 @@ struct Diary
     void write();
     void load();
     void updateCapacity();
+    std::vector<Message*> search(const std::string& findString);
 };
 #endif

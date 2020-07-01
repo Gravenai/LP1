@@ -26,7 +26,7 @@ int App::run(int argc, char* argv[])
         list_messages();
     } else if (action == "search") {
         if (argc == 3) {
-
+            
             search(argv[2]);
         } else {
             return show_usage();
@@ -61,18 +61,11 @@ void App::list_messages()
     }
 }
 
-Message* App::search(const std::string findString){
-    for (size_t i = 0; i < diary.messages_size; ++i) {
-        Message* message = &(diary.messages[i]);
-        int aux = -1;
-        aux = message->content.find(findString);
-
-        if (aux != -1){
-            std::cout << "-" << message->content << std::endl;
-            return message;
-        }
+void App::search(const std::string message){
+    
+    for (auto i : diary.search(message)){
+        std::cout << "-" << i->content << std::endl;
     }
-    return nullptr;
 }
 
 int App::show_usage()
