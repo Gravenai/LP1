@@ -62,9 +62,12 @@ void App::list_messages()
 }
 
 void App::search(const std::string message){
-    
+    int count = 0;
+    std::vector<Message*> aux = diary.search(message);
     for (auto i : diary.search(message)){
-        std::cout << "-" << i->content << std::endl;
+        count++;
+        std::cout << count;
+        std::cout << "- " << i->content << std::endl;
     }
 }
 

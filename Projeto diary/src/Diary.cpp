@@ -104,7 +104,7 @@ void Diary::load(){
 
 std::vector<Message*> Diary::search(const std::string& findString) {
     std::vector<Message*> aux;
-    for (auto i : messages){
+    for (auto& i : messages){
         int equal = -1;
 
         equal = i.content.find(findString);
@@ -113,5 +113,6 @@ std::vector<Message*> Diary::search(const std::string& findString) {
 
         }
     }
+
     return aux;
 }

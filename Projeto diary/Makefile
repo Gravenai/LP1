@@ -18,3 +18,7 @@ Date.o: src/Date.cpp include/Date.h
 
 App.o: src/App.cpp include/App.h
 	$(COMPILER) $(FLAGS) -c src/App.cpp
+
+clean:
+	rm -f *.o
+	rm exec
