@@ -2,6 +2,6 @@
 
 int main(int argc, char* argv[]){
 
-    App aplicativo("dados.md");
+    App aplicativo;
     return aplicativo.run(argc, argv);
 }

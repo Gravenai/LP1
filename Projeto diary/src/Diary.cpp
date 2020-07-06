@@ -1,5 +1,6 @@
 #include "../include/Diary.h"
 
+
 std::string format_current_date(const std::string &format) {
   std::time_t time = std::time(nullptr);
   char result[1024];
@@ -17,8 +18,9 @@ std::string get_current_time() {
 
 // ---------------------------------------------------------------------------------------------------------------
 
-Diary::Diary(const std::string& name) : filename(name), messages_size(0), messages_capacity(10)
+Diary::Diary() : messages_size(0), messages_capacity(10)
 {
+    updateConfig();
     load();
     
 }
@@ -30,9 +32,6 @@ Diary::~Diary()
 
 void Diary::add(const std::string& message)
 {
-    if (messages_size >= messages_capacity) {
-        return;
-    }
 
     Message m;
     m.content = message;
@@ -47,11 +46,11 @@ void Diary::add(const std::string& message)
 void Diary::write()
 {   
 
-    std::ofstream outputFile(filename);
+    std::ofstream outputFile(path);
     Date pointerDate = messages[0].date;
 
     outputFile << "# " << messages[0].date.to_string() << "\n";
-    for (int i = 0; i < messages_size; i++){
+    for (size_t i = 0; i < messages_size; i++){
         if (messages[i].date.to_string() == pointerDate.to_string()){
             outputFile << "- " << messages[i].time.to_string() << " " << messages[i].content << "\n";
         } else {
@@ -65,11 +64,43 @@ void Diary::write()
     // gravar as mensagens no disco
 }
 
-void Diary::load(){
-    std::ifstream readFile(filename);
-    std::string line;
-    int number = 0;
+std::vector<std::string> Diary::list(std::string formatSend){
+    std::vector<std::string> auxVector;
+    for (size_t i = 0; i < messages_size; ++i) {
+        std::stringstream streamRead(formatSend);
+        std::stringstream streamOutput;
+        char aux;
+        while(aux = streamRead.get(), streamRead){
 
+            if (aux == '%'){
+                streamRead >> aux;
+                switch (aux){
+                    case 'd':
+                        streamOutput << messages[i].date.to_string();
+                    break;
+                    case 't':
+                        streamOutput << messages[i].time.to_string();
+                    break;
+                    case 'm':
+                        streamOutput << messages[i].content;
+                    break;
+                    default:
+                        streamOutput << "%" << aux; 
+                    break;
+                }
+            } else {
+                streamOutput << aux;
+            }
+        }
+        streamOutput << "\n";
+        auxVector.push_back(streamOutput.str());
+    }
+    return auxVector;
+}
+
+void Diary::load(){
+    std::ifstream readFile(path);
+    std::string line;
     Time auxTime;
     Date auxDate;
     char aux;
@@ -99,6 +130,22 @@ void Diary::load(){
                 
             }
         }
+    }
+}
+
+void Diary::updateConfig(){
+    std::ifstream config("diary.config");
+    if (config.is_open()){
+        std::string line;
+        getline(config, line);
+        path = line.substr(5, line.length() - 1);
+        getline(config, line);
+        format = line.substr(15, line.length() - 1);
+    } else {
+        std::ofstream createFile("diary.config");
+        createFile <<  "path=diary.md\ndefault_format=%d %t: %m\n";
+        path = "diary.md";
+        format = "%d %t: %m";
     }
 }
 

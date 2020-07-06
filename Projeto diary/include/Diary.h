@@ -11,18 +11,20 @@
 
 struct Diary
 {
-    Diary(const std::string& filename);
+    Diary();
     ~Diary();
 
-    std::string filename;
     std::vector<Message> messages;
+    std::string path;
+    std::string format;
     size_t messages_size;
     size_t messages_capacity;
 
     void add(const std::string& message);
     void write();
     void load();
-    void updateCapacity();
+    void updateConfig();
+    std::vector<std::string> list(std::string formatSend);
     std::vector<Message*> search(const std::string& findString);
 };
 #endif

@@ -3,8 +3,10 @@
 #include <iostream>
 #include <string>
 
-App::App(const std::string& filename) : diary(filename)
+App::App() : diary()
 {
+    
+
 }
 
 int App::run(int argc, char* argv[])
@@ -23,7 +25,11 @@ int App::run(int argc, char* argv[])
             add(argv[2]);
         }
     } else if (action == "list") {
-        list_messages();
+        if (argc == 2){
+            list_messages();
+        } else {
+            list_messages(argv[2]);
+        }
     } else if (action == "search") {
         if (argc == 3) {
             
@@ -31,6 +37,8 @@ int App::run(int argc, char* argv[])
         } else {
             return show_usage();
         }
+    } else if (action == "interactive") {
+        activeInteractive();
     } else {
         return show_usage();
     }
@@ -38,10 +46,34 @@ int App::run(int argc, char* argv[])
     return 0;
 }
 
+void App::activeInteractive (){
+    int action = -1;
+    std::string lixo;
+    while (action != 0){
+    show_menu();
+    std::cin >> action;
+    std::getline(std::cin, lixo);
+    switch (action){
+        case 1:
+        list_messages();
+        break;
+
+        case 2:
+        add();
+        break;
+
+        case 3:
+        search();
+        break;
+    }
+    }
+}
+
+
 void App::add()
 {
     std::string message;
-    std::cout << "Enter your message:" << std::endl;
+    std::cout << "Digite sua mensagem:" << std::endl;
     std::getline(std::cin, message);
 
     add(message);
@@ -55,20 +87,41 @@ void App::add(const std::string message)
 
 void App::list_messages()
 {
-    for (size_t i = 0; i < diary.messages_size; ++i) {
-        const Message& message = diary.messages[i];
-        std::cout << "-" << message.content << std::endl;
+    list_messages(diary.format);
+}
+
+void App::list_messages(const std::string format){
+
+    for (auto i : diary.list(format)){
+        std::cout << i;
     }
 }
 
+void App::search(){
+    std::string message;
+    std::cout << "Digite sua mensagem:" << std::endl;
+    std::getline(std::cin, message);
+
+    search(message);
+}
+
 void App::search(const std::string message){
-    int count = 0;
-    std::vector<Message*> aux = diary.search(message);
+
     for (auto i : diary.search(message)){
-        count++;
-        std::cout << count;
         std::cout << "- " << i->content << std::endl;
     }
+}
+
+void App::show_menu(){
+    std::cout << "\n";
+    std::cout << "Diário 1.0 \n";
+    std::cout << "Selecione uma ação: \n";
+    std::cout << "1) Listar mensagens \n";
+    std::cout << "2) Adicionar nova mensagem \n";
+    std::cout << "3) Buscar mensagem \n";
+    std::cout << "\n";
+    std::cout << "0) Finalizar \n";
+    std::cout << "\n";
 }
 
 int App::show_usage()
