@@ -2,12 +2,14 @@
 #define ACOOUNT_H
 
 #include <string>
+#include "Client.hpp"
 
 class Account {
 	public:
 	std::string name;
 	int cpf;
 	double balance;
+	Client cliente;
 
 	Account();
 	~Account();
