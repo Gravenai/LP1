@@ -10,6 +10,7 @@ class Account {
 	int cpf;
 	double balance;
 	Client cliente;
+	static int quantAccount;
 
 	Account();
 	~Account();

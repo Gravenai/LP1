@@ -9,6 +9,9 @@ class Client{
 		std::string name;
 		int cpf;
 		Bank agency;
+		static int quantClient;
+
+		Client();
 };
 
 #endif

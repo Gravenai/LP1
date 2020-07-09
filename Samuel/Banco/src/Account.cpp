@@ -1,10 +1,10 @@
 #include "../include/Account.hpp"
 
 Account::Account(){
-
+	this->quantAccount+=1;
 }
 Account::~Account(){
-
+	
 }
 
 void Account::deposit(double money){
