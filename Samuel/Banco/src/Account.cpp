@@ -1,5 +1,7 @@
 #include "../include/Account.hpp"
 
+int Account::quantAccount;
+
 Account::Account(){
 	this->quantAccount+=1;
 }
