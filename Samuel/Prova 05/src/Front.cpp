@@ -16,6 +16,7 @@ int Front::run(){
 
 	std::cout << "Deseja inicializar um novo cliente? (s/n)\n";
 	std::cin >> cliente;
+	std::string codigo;
 	
 	while (cliente != 'n'){
 		
@@ -32,9 +33,9 @@ int Front::run(){
 					listar();
 				break;
 				case 2:
-					std::cout << "Digite o codigo de um produto: \n";
-					int codigo;
-					std::cin >> codigo;
+					std::cout << "Digite o nome de um produto: \n";
+					getline(std::cin, codigo);
+					getline(std::cin, codigo);
 					comprar(codigo, novoCliente);
 					
 				break;
@@ -43,7 +44,20 @@ int Front::run(){
 				break;
 				case 4:
 					novoCliente.quantClientes++;
-					
+				break;
+				case 5:
+					listarFornecimento();
+				break;
+				case 6:
+					std::cout << "Digite o nome do produto: \n";
+					std::string nome;
+					getline(std::cin, nome);
+					getline(std::cin, nome);
+
+					std::cout << "Digite a quantidade: \n";
+					size_t quant;
+					std::cin >> quant;
+					reabastecerEstoque(quant, nome);
 				break;
 			}
 			std::cout << "\n";
@@ -60,16 +74,19 @@ void Front::exibirMenu(){
 	std::cout << "2 - Adicionar compra a sacola\n";
 	std::cout << "3 - Visualizar produtos na sacola\n";
 	std::cout << "4 - Finalizar compras do cliente\n";
+	std::cout << "5 - Visualizar produtos do fornecedor\n";
+	std::cout << "6 - Adicionar produtos do fornecedor\n";
 	//std::cout << "0 - Encerrar o programa\n";
 }
 
 void Front::listar(){
-	for (auto i : estabelecimento.produtosDispo){
-		std::cout << i.toString() << "\n";
+	for (int i = 0; i <= estabelecimento.produtosDispo.lastIndex; i++){
+		std::cout << estabelecimento.produtosDispo.getElementIndex(i).toString() << "\n";
 	}
 }
 
-void Front::comprar(int codigo, Cliente &cliente){
+void Front::comprar(std::string codigo, Cliente &cliente){
+
 	if (estabelecimento.venda(codigo, cliente)){
 		std::cout << "Venda efetuada\n";
 	} else {
@@ -79,8 +96,24 @@ void Front::comprar(int codigo, Cliente &cliente){
 }
 
 
-void Front::listar(Cliente cliente){
-	for (auto i : cliente.sacola){
-		std::cout << i.toString() << "\n";
+void Front::listar(Cliente &cliente){
+	for (int i = 0; i <= cliente.sacola.lastIndex; i++){
+		std::cout << cliente.sacola.getElementIndex(i).toString() << "\n";
+	}
+}
+
+void Front::listarFornecimento(){
+	VectorSup<Produto> aux = estabelecimento.listarFornecimento();
+	for (int i = 0; i <= aux.lastIndex; i++){
+		std::cout << aux.getElementIndex(i).toStringResumed() << "\n";
+	}
+	
+}
+
+void Front::reabastecerEstoque(size_t quant, std::string nome){
+	if (estabelecimento.reabastecer(quant, nome)){
+		std::cout << "Os produtos foram adicionados ao estoque";
+	} else {
+		std::cout << "Ocorreu um erro";
 	}
 }

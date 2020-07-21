@@ -11,20 +11,21 @@ Cliente::~Cliente(){
 }
 
 bool Cliente::comprar(Produto produto){
-
+	
 	if (saldo >= produto.preco){
 		saldo -= produto.preco;
 		int count = 0;
-		for (auto &i : sacola){
+
+		for (int i = 0; i <= sacola.lastIndex; i++){
 			count++;
-			if (i.codigo == produto.codigo){
-				i.quantidade++;
+			if (sacola.getElementIndex(i).codigo == produto.codigo){
+				sacola.getElementIndex(i).quantidade++;
 				
 				return true;
 			}
 		}
 		produto.quantidade = 1;
-		sacola.push_back(produto);
+		sacola.addElement(produto);
 		
 		return true;
 	}
@@ -36,7 +37,7 @@ void Cliente::registro(){
 	stream << "clientes/cliente_" << quantClientes << ".txt";
 	std::ofstream outputFile(stream.str());
 
-	for (auto i : sacola){
-		outputFile << i.toFile() << "\n";
+	for (int i = 0; i <= sacola.lastIndex; i++){
+		outputFile << sacola.getElementIndex(i).toFile() << "\n";
 	}
 }

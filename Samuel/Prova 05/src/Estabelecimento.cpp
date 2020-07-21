@@ -12,7 +12,7 @@ Estabelecimento::Estabelecimento(std::string fileName){
 
 Estabelecimento::~Estabelecimento(){
 	caixa();
-	
+	updateEstoque();
 }
 
 void Estabelecimento::loadProdutos(){
@@ -40,7 +40,7 @@ void Estabelecimento::loadProdutos(){
 			auxProduto.nome = aux;
 
 			// Inserindo a unidade de medida
-			auxInt = line.find('.');
+			auxInt = line.find(',');
 			aux = line.substr(0, auxInt);
 			line.erase(0, auxInt + 1);
 			auxProduto.unidadeMedida = aux;
@@ -60,37 +60,39 @@ void Estabelecimento::loadProdutos(){
 			char lixo;
 
 			stream >> auxFloat;
-			auxProduto.preco = auxFloat;
+			/*auxProduto.preco = auxFloat;
 			stream >> lixo;
-			stream >> auxFloat;
-			auxProduto.preco = auxProduto.preco + (auxFloat/100);
+			stream >> auxFloat;*/
+			auxProduto.preco = auxFloat;
 
 			//Inserindo a quantidade
 			line.erase(0, 1);
 			auxProduto.quantidade = std::stoi(line);
 			
-			produtosDispo.push_back(auxProduto);
+			produtosDispo.addElement(auxProduto);
     	}
     	readFile.close();
   	}
 	
 }
 
-bool Estabelecimento::venda(int codigo, Cliente &cliente){
-	for (auto &i : produtosDispo){
-		if (i.codigo == codigo){
-			if (cliente.comprar(i)){
-				i.quantidade--;
-				for (auto &j : produtosVendi){
-					if (i.codigo == j.codigo){
-						j.quantidade++;
+bool Estabelecimento::venda(std::string codigo, Cliente &cliente){
+	
+	for (int i = 0; i <= produtosDispo.lastIndex; i++){
+		
+		if (produtosDispo.getElementIndex(i).nome == codigo){
+			if (cliente.comprar(produtosDispo.copyElementIndex(i))){
+				produtosDispo.getElementIndex(i).quantidade--;
+				for (int j = 0; j <= produtosVendi.lastIndex; j++){
+					if (produtosDispo.getElementIndex(i).codigo == produtosVendi.getElementIndex(j).codigo){
+						produtosVendi.getElementIndex(j).quantidade++;
 						return true;
 					}
 					
 				}
-				Produto aux = i;
+				Produto aux = produtosDispo.copyElementIndex(i);
 				aux.quantidade = 1;
-				produtosVendi.push_back(aux);
+				produtosVendi.addElement(aux);
 				return true;
 			} else {
 				return false;
@@ -105,17 +107,38 @@ void Estabelecimento::caixa(){
 	double valArrecado = 0;
 	std::ofstream outputFile("caixa.csv");
 	outputFile << "COD,PRODUTO,UNIDADE DE MEDIDA,PREÇO,QUANTIDADE\n";
-	for (auto i : produtosVendi){
-		outputFile << i.toFile() << "\n";
-		valArrecado += i.quantidade * i.preco;
+	for (int i = 0; i <= produtosVendi.lastIndex; i++){
+		outputFile << produtosVendi.getElementIndex(i).toFile() << "\n";
+		valArrecado += produtosVendi.getElementIndex(i).quantidade * produtosVendi.getElementIndex(i).preco;
 	}
 	outputFile << "Valor arrecadado final: R$" << valArrecado << "\n";
 }
 
-/*void Estabelecimento::updateEstoque(){
+bool Estabelecimento::reabastecer(size_t quant, std::string produto){
+	Produto searchProdut;
+	searchProdut.nome = produto;
+	searchProdut.quantidade = quant;
+	if (fornecedor.repassarProdutos(searchProdut)){
+		for (int i = 0; i <= produtosDispo.lastIndex; i++){
+			if (produtosDispo.getElementIndex(i).nome == searchProdut.nome){
+				produtosDispo.getElementIndex(i).quantidade = produtosDispo.getElementIndex(i).quantidade + quant;
+				return true;
+			}
+		}
+		// Aprimorar isso
+	}
+	return false;
+	//return true;
+}
+
+VectorSup<Produto> Estabelecimento::listarFornecimento(){
+	return fornecedor.getProdutos();
+}
+
+void Estabelecimento::updateEstoque(){
 	std::ofstream outputFile("estoque.csv");
 	outputFile << "COD,PRODUTO,UNIDADE DE MEDIDA,PREÇO,QUANTIDADE\n";
-	for (auto i : produtosDispo){
-		outputFile << i.toFile() << "\n";
+	for (int i = 0; i <= produtosDispo.lastIndex; i++){
+		outputFile << produtosDispo.getElementIndex(i).toFile() << "\n";
 	}
-}*/
+}

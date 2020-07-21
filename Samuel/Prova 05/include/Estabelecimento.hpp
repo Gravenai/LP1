@@ -5,20 +5,27 @@
 #include <string>
 #include "Produto.hpp"
 #include "Cliente.hpp"
+#include "Fornecedor.hpp"
+#include "VectorSup.hpp"
 #include <fstream>
 #include <sstream>
 
 class Estabelecimento {
 	public:
-	std::vector<Produto> produtosDispo;
-	std::vector<Produto> produtosVendi;
+	VectorSup<Produto> produtosDispo;
+	VectorSup<Produto> produtosVendi;
+	Fornecedor fornecedor;
 	std::string fileName = "estoque.csv";
 
 	Estabelecimento();
 	Estabelecimento(std::string fileName);
 	~Estabelecimento();
-	std::vector<std::string> listar();
-	bool venda(int codigo, Cliente &cliente);
+
+	VectorSup<std::string> listar();
+	VectorSup<Produto> listarFornecimento();
+	bool venda(std::string codigo, Cliente &cliente);
+	bool reabastecer(size_t quant, std::string produto);
+	void updateEstoque();
 	void caixa();
 
 	private:

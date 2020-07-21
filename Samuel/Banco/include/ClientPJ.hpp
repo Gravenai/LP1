@@ -2,16 +2,19 @@
 #define CLIENTPJ_H
 
 #include <string>
-#include "Bank.hpp"
+#include "Client.hpp"
 
-class ClientPJ{
-	public:
+class ClientPJ : public Client{
+	private:
 		std::string razaoSocial;
 		std::string cnpj;
-		Bank agency;
-		static int quantClient;
 
-		ClientPJ();
+	public:
+		ClientPJ(std::string name);
+		std::string getRazaoSocial();
+		void setRazaoSocial(std::string razaoSocial);
+		std::string getCnpj();
+		void setCnpj(std::string cnpj);
 };
 
 #endif

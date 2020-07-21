@@ -15,7 +15,9 @@ class Produto {
 	Produto();
 	Produto(std::string nome, int codigo, double preco, std::string unidadeMedida, int quantidade);
 	std::string toString();
+	std::string toStringResumed();
 	std::string toFile();
+	std::string toFileResumed();
 };
 
 #endif

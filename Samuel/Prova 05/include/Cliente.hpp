@@ -5,11 +5,12 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include "VectorSup.hpp"
 
 class Cliente {
 	public:
 	float saldo;
-	std::vector<Produto> sacola;
+	VectorSup<Produto> sacola;
 	int static quantClientes;
 
 	Cliente();

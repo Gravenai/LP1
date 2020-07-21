@@ -9,7 +9,6 @@ class Account {
 	std::string name;
 	int cpf;
 	double balance;
-	Client cliente;
 	static int quantAccount;
 
 	Account();

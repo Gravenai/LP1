@@ -1,7 +1,5 @@
 #include "../include/ClientPJ.hpp"
 
-int ClientPJ::quantClient;
+ClientPJ::ClientPJ(std::string name) : Client(name){
 
-ClientPJ::ClientPJ(){
-	this->quantClient++;
 }

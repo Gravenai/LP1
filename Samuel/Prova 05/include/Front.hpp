@@ -16,8 +16,10 @@ class Front {
 	Front(std::string fileName);
 	int run();
 	void listar();
-	void listar(Cliente cliente);
-	void comprar(int codigo, Cliente &cliente);
+	void listar(Cliente &cliente);
+	void listarFornecimento();
+	void comprar(std::string codigo, Cliente &cliente);
+	void reabastecerEstoque(size_t quant, std::string nome);
 	static void exibirMenu();
 
 };

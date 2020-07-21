@@ -5,13 +5,18 @@
 #include "Bank.hpp"
 
 class Client{
-	public:
+	private:
 		std::string name;
-		int cpf;
 		Bank agency;
 		static int quantClient;
 
-		Client();
+	public:
+		Client(std::string name);
+		std::string getName();
+		void setName(std::string name);
+		Bank getAgency();
+		void setAgency(Bank bank);
+
 };
 
 #endif
